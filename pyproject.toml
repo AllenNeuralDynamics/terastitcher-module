@@ -29,6 +29,7 @@ dependencies = [
     'dask[distributed]',
     'natsort',
     'scikit-image',
+    'pims',
     'aind-ng-link@git+https://github.com/AllenNeuralDynamics/aind-ng-link.git',
     'pystripe@git+https://github.com/camilolaiton/pystripe.git@feature/output_format',
     'ome-zarr@git+https://github.com/camilolaiton/ome-zarr-py.git@feature/delayed-dask-poc',
