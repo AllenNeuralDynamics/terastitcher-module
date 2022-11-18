@@ -761,18 +761,18 @@ class TeraStitcher:
         for channel_idx in range(len(channels)):
             layers.append(
                 {
-                    "source": self.ome_zarr_path.joinpath(
+                    "source": str(self.ome_zarr_path.joinpath(
                         channels[channel_idx] + ".zarr"
-                    ),
-                    "channel": 0,  # channel_idx, # use channel idx when source is the same in zarr to change channel
-                    "name": channels[channel_idx],
+                    )),
+                    "channel": channel_idx, # use channel idx when source is the same in zarr to change channel otherwise 0
+                    "name": str(channels[channel_idx]),
                     "shader": {
                         "color": colors[channel_idx],
                         "emitter": "RGB",
                         "vec": "vec3",
                     },
                     "shaderControls": {  # Optional
-                        "normalized": {"range": [0, 500]}
+                        "normalized": {"range": [0, 200]}
                     },
                 }
             )
@@ -1241,16 +1241,20 @@ def execute_terastitcher(
 
     else:
 
-        try:
-            config_teras["preprocessing_steps"]["pystripe"]["input"] = Path(
-                input_data
-            )
-            config_teras["preprocessing_steps"]["pystripe"]["output"] = Path(
-                preprocessed_data
-            ).joinpath("destriped")
-        except KeyError:
-            config_teras["preprocessing_steps"] = None
+        if config_teras["preprocessing_steps"]["pystripe"]["execute_pystripe"]:
+            try:
+                config_teras["preprocessing_steps"]["pystripe"]["input"] = Path(
+                    input_data
+                )
+                config_teras["preprocessing_steps"]["pystripe"]["output"] = Path(
+                    preprocessed_data
+                ).joinpath("destriped")
+            except KeyError:
+                config_teras["preprocessing_steps"] = None
 
+        else:
+            config_teras["preprocessing_steps"] = None
+        
         terastitcher_tool = TeraStitcher(
             input_data=input_data,
             output_folder=output_folder,

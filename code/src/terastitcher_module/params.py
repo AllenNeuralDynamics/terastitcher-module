@@ -6,7 +6,7 @@ from pathlib import Path
 import yaml
 from argschema import ArgSchema, ArgSchemaParser
 from argschema.fields import (Boolean, Float, InputDir, InputFile, Int, List,
-                              Nested, NumpyArray, Str)
+                              Nested, Str)
 from argschema.schemas import DefaultSchema
 from marshmallow import validate
 from zarr_converter import OmeZarrParams
@@ -176,6 +176,15 @@ class MergeParameters(DefaultSchema):
 
 class PystripeParams(DefaultSchema):
     # input and output are already defined in PipelineParams Class
+
+    execute_pystripe = Boolean(
+        required=False,
+        metadata={
+            "description": "Boolean that indicates that pystripe will be executed"
+        },
+        dump_default=True
+    )
+
     sigma1 = List(
         Int(),
         required=False,
