@@ -322,9 +322,9 @@ def read_chunked_stitched_image_per_channel(
                 except:  # else:
                     # Due to the different brain volume and output shape, sometimes the stitching does not include last horizontal
                     # To match array shape, we include a black background since this mostly happens at the end of the images
-                    print(
-                        f"Not able to read read horizontal. Array shape: {slice_pos} {directory_structure[channel_name][column_name][row_name]}: {len(directory_structure[channel_name][column_name][row_name])} {len(horizontal)} \n"
-                    )
+                    # print(
+                    #     f"Not able to read read horizontal. Array shape: {slice_pos} {directory_structure[channel_name][column_name][row_name]}: {len(directory_structure[channel_name][column_name][row_name])} {len(horizontal)} \n"
+                    # )
                     horizontal.append(zeros(chunksize, dtype))
 
                 idx_row += 1
@@ -370,7 +370,7 @@ def channel_parallel_reading(
 
     cols = list(directory_structure.values())[0]
     n_images = len(list(list(cols.values())[0].values())[0])
-    LOGGER.info("n_images: ", n_images)
+    LOGGER.info(f"n_images: {n_images}")
 
     channel_paths = list(directory_structure.keys())
     dask_array = None
@@ -388,7 +388,7 @@ def channel_parallel_reading(
             chunksize=sample_img.chunksize,
             dtype=sample_img.dtype,
         )[0]
-        LOGGER.info("No need for parallel reading...", dask_array)
+        LOGGER.info(f"No need for parallel reading... {dask_array}")
 
     else:
         images_per_worker = n_images // workers
@@ -488,6 +488,8 @@ def parallel_read_chunked_stitched_multichannel_image(
     channel_paths = list(directory_structure.keys())
 
     multichannels = []
+    LOGGER.info(f"Channel in directory structure: {channel_paths}")
+    
     for channel_idx in range(len(channel_paths)):
         LOGGER.info(f"Reading images from {channel_paths[channel_idx]}")
         start_time = time.time()
@@ -647,9 +649,9 @@ class ZarrConverter:
                         sample_img = lazy_tiff_reader(str(sample_path))
                         # sample_img = imread(str(sample_path))
 
-        LOGGER.info("Sample image in dataset: ", sample_img)
+        LOGGER.info(f"Sample image in dataset: {sample_img} Channels: {directory_structure.keys()}")
 
-        workers = 11
+        workers = 0
         image = pad_array_n_d(
             parallel_read_chunked_stitched_multichannel_image(
                 directory_structure, sample_img, workers

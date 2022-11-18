@@ -46,9 +46,9 @@ merge:
     - allow-run-as-root
   volout_plugin: '"TiledXY|2Dseries"'
   slice_extent:
-  - 250
-  - 250
-  - 250
+  - 500
+  - 500
+  - 500
 ome_zarr_params:
   codec: zstd
   clevel: 3

@@ -24,7 +24,7 @@ dependencies = [
     'xarray_multiscale',
     'argschema',
     'mpi4py',
-    'bokeh==2.4',
+    'bokeh==2.4.2',
     'pint',
     'dask[distributed]',
     'natsort',
